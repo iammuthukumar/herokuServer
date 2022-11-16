@@ -64,6 +64,8 @@ class KiteApp:
     EXCHANGE_BFO = "BFO"
     EXCHANGE_MCX = "MCX"
 
+    orderIncremental=0;
+
     def __init__(self, enctoken):
         self.headers = {"Authorization": f"enctoken {enctoken}"}
         self.session = requests.session()
@@ -131,8 +133,12 @@ class KiteApp:
         for k in list(params.keys()):
             if params[k] is None:
                 del params[k]
-        order_id = self.session.post(f"{self.root_url}/orders/{variety}",
-                                     data=params, headers=self.headers).json()
+        #order_id = self.session.post(f"{self.root_url}/orders/{variety}",
+         #                            data=params, headers=self.headers).json()
+         
+        orderIncremental = orderIncremental+1
+        order_id={'status': 'success', 'data': {'order_id': orderIncremental}}
+        print(params)
         return order_id
 
     def modify_order(self, variety, order_id, parent_order_id=None, quantity=None, price=None, order_type=None,
